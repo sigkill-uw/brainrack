@@ -1,5 +1,7 @@
 #lang racket
 
+;; Refer to LICENSE.txt for licensing information (GPL 3.0)
+
 (provide memory memory-deref memory-shift memory-inc memory-set)
 
 (struct memory (left right bytes))

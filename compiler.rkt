@@ -9,10 +9,10 @@
 ;; Need operation
 (require "common.rkt")
 
-;; compile is public;; everything else is internal to compiler
+;; compile is public; everything else is internal to compiler
 (provide compile)
 
-;; compile: string -> listof operation
+;; compile: string -> (listof operation)
 ;; Compiles a textual Brainfuck program to the interpreter's internal operation representation.
 ;; Performs some trivial optimizations (folding together + and -, for instance);;
 ;; also detects bracket matching issues, throwing errors when they are encountered.
@@ -23,7 +23,7 @@
 	;; this allows us to build up the program with simple cons operations and execute it forward with foldl later
 	(compile-check-left (sequence-fold (lambda (i c) (compile-step (integer->char c) i)) empty file)))
 
-;; compile-check-right: listof operation -> listof operation
+;; compile-check-right: (listof operation) -> (listof operation)
 ;; Checks whether the given compiled program has unmatched closing brackets.
 ;; If so, an error is thrown;; if not, the program is returned unchanged.
 (define (compile-check-left prog)
@@ -98,8 +98,8 @@
 		[(equal? c #\-) (cons (operation 'add -1) prog)]
 		[(equal? c #\>) (cons (operation 'shift 1) prog)]
 		[(equal? c #\<) (cons (operation 'shift -1) prog)]
-		[(equal? c #\.) (cons (operation 'out 1) prog)]
 		[(equal? c #\,) (cons (operation 'in 1) prog)]
+		[(equal? c #\.) (cons (operation 'out 1) prog)]
 		[(equal? c #\[) (cons (operation 'unf-loop empty) prog)]
 		[(equal? c #\]) (error "unmatched brackets: too many ]'s")]
 		[else prog])) ;; Characters not in the above set are ignored in Brainfuck

@@ -1,5 +1,7 @@
 #lang racket
 
+;; Refer to LICENSE.txt for licensing information (GPL 3.0)
+
 (require "compiler.rkt")
 (require "interpreter.rkt")
 
@@ -22,7 +24,9 @@
 ;; Hello World
 (check-equal?
 	(get-output-string (run
-		(compile (open-input-string "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."))
+		(compile (open-input-string (string-append
+				"++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---"
+				".+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.")))
 		(open-input-string "")
 		(open-output-string)))
 	"Hello World!\n")
@@ -112,3 +116,5 @@
 ;; nonsense
 (check-equal? (compile (open-input-string "")) empty)
 (check-equal? (compile (open-input-string "this is nonsense")) empty)
+(check-exn (lambda (x) (string=? (exn-message x) "unmatched brackets: too many ['s")) (lambda () (compile (open-input-string "["))))
+(check-exn (lambda (x) (string=? (exn-message x) "unmatched brackets: too many ]'s")) (lambda () (compile (open-input-string "]"))))
